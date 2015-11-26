@@ -20,7 +20,7 @@ Usage
 
 .. code-block:: bash
 
-	from dbtemplates import Template
+    from dbtemplates import Template
     from django_service_templates.models import ServiceTemplate
 
     class HeatTemplate(ServiceTemplate):
@@ -29,7 +29,7 @@ Usage
 
         pass
 
-	dbtemplate = Template.objects.create(name='My Jinja2 Template', content='{{ name }}')
+    dbtemplate = Template.objects.create(name='My Jinja2 Template', content='{{ name }}')
 
     HeatTemplate.objects.create(template=dbtemplate, context={'name': 'My name'}).render()
 
