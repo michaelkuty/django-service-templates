@@ -31,7 +31,8 @@ class ServiceTemplate(PolymorphicModel):
     template = models.ForeignKey(
         'dbtemplates.Template',
         verbose_name=_("Template"),
-        related_name="service_templates")
+        related_name="service_templates",
+        blank=True, null=True)
 
     context = YAMLField(blank=True, null=True)
     extra = YAMLField(blank=True, null=True)
@@ -50,8 +51,8 @@ class ServiceTemplate(PolymorphicModel):
     def __str__(self):
         return self.label
 
-    def get_data(self):
-        '''returns rendered data if is present or render new'''
+    def get_content(self):
+        '''returns rendered content'''
 
         if self.rendered:
             return self.rendered
@@ -80,19 +81,20 @@ class ServiceTemplate(PolymorphicModel):
         ctx.update(extra_context)
         return ctx
 
-    def get_yaml_template(self):
+    def get_yaml_content(self):
         '''specific reclass/heat method'''
-        return yaml.load(self.get_data())
+        return yaml.load(self.get_content())
 
     def save(self, *args, **kwargs):
 
-        # render with fail silently
-        try:
-            self.rendered = self.render()
-            self.modified = datetime.now()
-        except Exception as e:
-            if settings.DEBUG:
-                raise e
+        if self.sync:
+            # render with fail silently
+            try:
+                self.rendered = self.render()
+                self.modified = datetime.now()
+            except Exception as e:
+                if settings.DEBUG:
+                    raise e
 
         super(ServiceTemplate, self).save(*args, **kwargs)
 
