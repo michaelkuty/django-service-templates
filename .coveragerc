@@ -1,0 +1,5 @@
+[run]
+source = django_service_templates
+omit =
+    *migrations*
+    django_service_templates/__init__.py

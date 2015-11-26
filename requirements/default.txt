@@ -1,0 +1,4 @@
+django-polymorphic==0.7.2
+leonardo-dbtemplates>=1.0.0a1
+django-yamlfield==0.4
+Jinja2==2.8
