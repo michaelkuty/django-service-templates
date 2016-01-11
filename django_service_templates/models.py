@@ -66,11 +66,17 @@ class ServiceTemplate(PolymorphicModel):
     @property
     def yaml_content(self):
         '''specific reclass/heat method'''
-        return yaml.load(self.get_content())
+        try:
+            yaml_content = yaml.load(self.content)
+        except:
+            pass
+        else:
+            return yaml_content
+        return dict()
 
     def get_yaml_content(self):
         '''Obsolete use yaml_content property'''
-        return self.get_yaml_content
+        return self.yaml_content
 
     def get_content(self):
         '''Obsolete use content property'''
