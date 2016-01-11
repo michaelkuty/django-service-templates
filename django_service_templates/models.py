@@ -51,7 +51,8 @@ class ServiceTemplate(PolymorphicModel):
     def __str__(self):
         return self.label
 
-    def get_content(self):
+    @property
+    def content(self):
         '''returns rendered content'''
 
         if self.rendered:
@@ -61,6 +62,19 @@ class ServiceTemplate(PolymorphicModel):
         self.save()
 
         return self.rendered
+
+    @property
+    def yaml_content(self):
+        '''specific reclass/heat method'''
+        return yaml.load(self.get_content())
+
+    def get_yaml_content(self):
+        '''Obsolete use yaml_content property'''
+        return self.get_yaml_content
+
+    def get_content(self):
+        '''Obsolete use content property'''
+        return self.content
 
     def render(self, context={}):
         '''Render Template with context'''
@@ -80,10 +94,6 @@ class ServiceTemplate(PolymorphicModel):
         ctx = self.context or {}
         ctx.update(extra_context)
         return ctx
-
-    def get_yaml_content(self):
-        '''specific reclass/heat method'''
-        return yaml.load(self.get_content())
 
     def save(self, *args, **kwargs):
 
